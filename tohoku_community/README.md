@@ -9,7 +9,7 @@ Flask + SQLite で実装したフルスタックのプロトタイプです。
 ```bash
 cd tohoku_community
 pip install -r requirements.txt
-python app.py
+py app.py
 ```
 
 `http://localhost:5000` にアクセスすると、初回起動時に SQLite データベース
