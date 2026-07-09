@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{{ profile_user.display_name }}のページ{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-start">
+  <div>
+    <h4>{{ profile_user.display_name }}</h4>
+    {% if follower_count is not none %}
+    <p class="text-muted small">フォロー {{ follow_count }}・フォロワー {{ follower_count }}（自分だけに表示されます）</p>
+    {% endif %}
+  </div>
+  {% if profile_user.id != current_user.id %}
+  <div>
+    {% if is_following %}
+    <form method="post" action="{{ url_for('sns.unfollow', user_id=profile_user.id) }}" class="d-inline">
+      <button class="btn btn-sm btn-outline-secondary">フォロー中</button>
+    </form>
+    {% else %}
+    <form method="post" action="{{ url_for('sns.follow', user_id=profile_user.id) }}" class="d-inline">
+      <button class="btn btn-sm tu-btn">フォローする</button>
+    </form>
+    {% endif %}
+
+    {% if is_blocked %}
+    <form method="post" action="{{ url_for('sns.unblock', user_id=profile_user.id) }}" class="d-inline">
+      <button class="btn btn-sm btn-outline-dark">ブロック解除</button>
+    </form>
+    {% else %}
+    <form method="post" action="{{ url_for('sns.block', user_id=profile_user.id) }}" class="d-inline">
+      <button class="btn btn-sm btn-outline-danger">ブロック</button>
+    </form>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+{% if profile_user.id != current_user.id and not is_blocked %}
+<form method="post" action="{{ url_for('sns.dm_start', user_id=profile_user.id) }}" class="my-3">
+  <div class="input-group">
+    <input class="form-control" name="content" placeholder="メッセージリクエストを送る" required>
+    <button class="btn tu-btn">送信</button>
+  </div>
+</form>
+{% endif %}
+
+{% if profile_user.id == current_user.id %}
+<a href="{{ url_for('auth.link_alumni') }}" class="small d-inline-block mt-2">卒業後アカウント連携の設定 →</a>
+{% endif %}
+
+<hr>
+<h5>投稿</h5>
+{% for post in posts %}
+<div class="card mb-2"><div class="card-body">
+  <p class="mb-1">{{ post.content }}</p>
+  <small class="text-muted">{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+</div></div>
+{% else %}
+<p class="text-muted">投稿はまだありません。</p>
+{% endfor %}
+{% endblock %}

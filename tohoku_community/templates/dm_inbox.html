@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}DM{% endblock %}
+{% block content %}
+<h4>ダイレクトメッセージ</h4>
+
+<h6 class="mt-4">受信したメッセージリクエスト</h6>
+<div class="list-group mb-3">
+  {% for t, other in requests_in %}
+  <a href="{{ url_for('sns.dm_thread', thread_id=t.id) }}" class="list-group-item list-group-item-action">
+    {{ other.display_name }} さんからのリクエスト
+  </a>
+  {% else %}<p class="text-muted small">ありません。</p>{% endfor %}
+</div>
+
+<h6>送信済みリクエスト（承認待ち）</h6>
+<div class="list-group mb-3">
+  {% for t, other in requests_out %}
+  <a href="{{ url_for('sns.dm_thread', thread_id=t.id) }}" class="list-group-item list-group-item-action">
+    {{ other.display_name }} さんへ送信中
+  </a>
+  {% else %}<p class="text-muted small">ありません。</p>{% endfor %}
+</div>
+
+<h6>トーク</h6>
+<div class="list-group">
+  {% for t, other in accepted %}
+  <a href="{{ url_for('sns.dm_thread', thread_id=t.id) }}" class="list-group-item list-group-item-action">
+    {{ other.display_name }}
+    {% if t.created_from_link %}<span class="badge tu-badge ms-2">匿名チャットから連携</span>{% endif %}
+  </a>
+  {% else %}<p class="text-muted small">トークはまだありません。</p>{% endfor %}
+</div>
+{% endblock %}

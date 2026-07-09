@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}異議申し立て{% endblock %}
+{% block content %}
+<h4>異議申し立て</h4>
+<p class="text-muted">
+  通報による利用停止・アカウント停止に誤りがあると思われる場合、
+  こちらから運営に申し立てることができます。
+</p>
+<form method="post" class="col-md-6 mb-4">
+  <div class="mb-3">
+    <textarea class="form-control" name="content" rows="4" placeholder="状況を説明してください" required></textarea>
+  </div>
+  <button class="btn tu-btn">申し立てる</button>
+</form>
+
+<h5>これまでの申し立て</h5>
+<ul class="list-group col-md-6">
+  {% for a in appeals %}
+  <li class="list-group-item">
+    <div class="d-flex justify-content-between align-items-start">
+      <span>{{ a.content }}</span>
+      <span class="badge bg-{{ 'success' if a.status == 'approved' else 'secondary' if a.status == 'pending' else 'danger' }} ms-2">
+        {{ {'pending': '審査中', 'approved': '承認', 'rejected': '却下'}[a.status] }}
+      </span>
+    </div>
+    <small class="text-muted">{{ a.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+  </li>
+  {% else %}
+  <li class="list-group-item text-muted">申し立てはありません。</li>
+  {% endfor %}
+</ul>
+{% endblock %}

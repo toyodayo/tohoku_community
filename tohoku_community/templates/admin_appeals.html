@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}異議申し立て管理{% endblock %}
+{% block content %}
+<h4>異議申し立て一覧（審査中）</h4>
+<div class="list-group">
+  {% for a in appeals %}
+  <div class="list-group-item">
+    <p class="mb-1"><strong>{{ a.user.display_name }}</strong>（{{ a.user.university_email or a.user.alumni_email }}）</p>
+    <p>{{ a.content }}</p>
+    <small class="text-muted d-block mb-2">{{ a.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+    <form method="post" action="{{ url_for('admin.approve', appeal_id=a.id) }}" class="d-inline">
+      <button class="btn btn-sm btn-success">承認して制限解除</button>
+    </form>
+    <form method="post" action="{{ url_for('admin.reject', appeal_id=a.id) }}" class="d-inline">
+      <button class="btn btn-sm btn-outline-danger">却下</button>
+    </form>
+  </div>
+  {% else %}
+  <p class="text-muted">審査中の申し立てはありません。</p>
+  {% endfor %}
+</div>
+{% endblock %}

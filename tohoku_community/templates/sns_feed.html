@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}実名SNS{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="mb-0">実名SNSモード</h4>
+  <button class="btn tu-btn btn-sm" data-bs-toggle="modal" data-bs-target="#newPostModal">＋ 投稿する</button>
+</div>
+
+{% for item in posts_data %}
+{% set post = item.post %}
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <a href="{{ url_for('sns.profile', user_id=post.author_id) }}" class="text-decoration-none">
+        <strong>{{ post.author.display_name }}</strong>
+      </a>
+      <small class="text-muted">{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+    </div>
+    <p>{{ post.content }}</p>
+
+    {% if post.post_type == 'poll' %}
+      <form method="post" action="{{ url_for('sns.vote', post_id=post.id) }}">
+        {% for opt in item.options %}
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="option_index" value="{{ loop.index0 }}"
+                 id="opt-{{ post.id }}-{{ loop.index0 }}" {% if item.my_vote == loop.index0 %}checked{% endif %}>
+          <label class="form-check-label" for="opt-{{ post.id }}-{{ loop.index0 }}">
+            {{ opt }}{% if item.vote_counts %}（{{ item.vote_counts[loop.index0] }}票）{% endif %}
+          </label>
+        </div>
+        {% endfor %}
+        <button class="btn btn-sm tu-btn mt-2">投票する</button>
+      </form>
+    {% elif post.post_type == 'recruitment' %}
+      <span class="badge bg-info text-dark mb-2">メンバー募集</span>
+      <form method="post" action="{{ url_for('sns.toggle_interest', post_id=post.id) }}">
+        <button class="btn btn-sm {{ 'btn-secondary' if item.i_am_interested else 'tu-btn' }}">
+          {{ '興味ありを取り消す' if item.i_am_interested else '興味あり' }}
+        </button>
+        <span class="ms-2 text-muted small">{{ item.interest_count }}人が興味あり</span>
+      </form>
+    {% endif %}
+  </div>
+</div>
+{% else %}
+<p class="text-muted">フォローしているユーザーの投稿がここに表示されます。</p>
+{% endfor %}
+
+<div class="modal fade" id="newPostModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="post" action="{{ url_for('sns.new_post') }}" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">新規投稿</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <select class="form-select mb-2" name="post_type">
+          <option value="normal">通常投稿</option>
+          <option value="poll">アンケート</option>
+          <option value="recruitment">メンバー募集</option>
+        </select>
+        <textarea class="form-control mb-2" name="content" rows="3" placeholder="内容" required></textarea>
+        <input class="form-control" name="options" placeholder="アンケートの場合: 選択肢をカンマ区切りで入力">
+      </div>
+      <div class="modal-footer">
+        <button class="btn tu-btn">投稿する</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

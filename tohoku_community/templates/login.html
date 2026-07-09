@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}ログイン - 東北大学community{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card shadow-sm tu-card">
+      <div class="card-body p-4">
+        <h4 class="mb-3 text-center">東北大学community</h4>
+        <p class="text-muted small text-center">
+          大学のGoogleアカウントでログインしてください。<br>
+          （デモ版のため、実際のOAuth認証の代わりにフォーム入力で代替しています）
+        </p>
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label">大学アカウントのメールアドレス</label>
+            <input type="email" class="form-control" name="email" placeholder="taro.tohoku@{{ domain }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">氏名（初回登録時のみ使用）</label>
+            <input type="text" class="form-control" name="real_name" placeholder="東北 太郎">
+          </div>
+          <button class="btn tu-btn w-100" type="submit">ログイン / 新規登録</button>
+        </form>
+        <p class="text-muted small mt-3 mb-0">
+          卒業生の方は、在学中に連携した個人メールアドレスでログインできます。
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

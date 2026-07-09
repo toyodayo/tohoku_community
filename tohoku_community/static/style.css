@@ -1,0 +1,39 @@
+:root {
+  --tu-purple: #4B2E83;
+  --tu-purple-dark: #341f5c;
+  --tu-gold: #C9A227;
+}
+
+body {
+  background-color: #f7f5fa;
+}
+
+.tu-navbar {
+  background-color: var(--tu-purple);
+}
+
+.tu-btn {
+  background-color: var(--tu-purple);
+  border-color: var(--tu-purple);
+  color: #fff;
+}
+.tu-btn:hover,
+.tu-btn:focus {
+  background-color: var(--tu-purple-dark);
+  border-color: var(--tu-purple-dark);
+  color: #fff;
+}
+
+.tu-badge {
+  background-color: var(--tu-purple);
+  color: #fff;
+}
+
+.tu-card {
+  border-top: 4px solid var(--tu-purple);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
